@@ -48,8 +48,18 @@ const activate = async (link) => {
     await user.save();
 };
 
-const getAll = async () => {
-    return await User.findAll();
+const statuses = {
+    active: async () => {
+        return await User.findAll({ where: { isActivated: true } });
+    },
+    inactive: async () => {
+        return await User.findAll({ where: { isActivated: false } });
+    },
+    default: async () => await User.findAll(),
+};
+
+const getAll = async (status) => {
+    return statuses[status] ? statuses[status]() : statuses['default']();
 };
 
 module.exports = {

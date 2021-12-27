@@ -38,7 +38,10 @@ const activate = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
     try {
-        const users = await UserService.getAll();
+        const { status } = req.query;
+
+        const users = await UserService.getAll(status);
+
         res.json(users);
     } catch (error) {
         next(error);
