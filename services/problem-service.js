@@ -1,10 +1,10 @@
-const { Op, literal } = require('sequelize');
-const { Problem, Tag, Picture } = require('./../models');
-const ErrorHandler = require('./../utils/error-handler');
+const { Op } = require('sequelize');
+const { Problem, Picture } = require('./../models');
 const PictureService = require('./../services/picture-service');
 
 const create = async (title, description, userId, tag, images) => {
     const problem = await Problem.create({ title, description, userId, tag });
+
     if (Array.isArray(images)) {
         images.forEach((i) => {
             PictureService.createPicture(i, problem.id);
@@ -67,7 +67,12 @@ const getAll = async ({ q, offset, limit, tag }) => {
     });
 };
 
+const deleteOne = async (id) => {
+    return await Problem.destroy({ where: { id } });
+};
+
 module.exports = {
     create,
+    deleteOne,
     getAll,
 };
